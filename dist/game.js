@@ -2741,15 +2741,24 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   loadSprite("grass", "sprites/grass.png");
   loadSprite("ghosty", "sprites/ghosty.png");
   loadSprite("coin", "sprites/coin.png");
-  scene("game", ({ score }) => {
+  loadSprite("portal", "sprites/portal.png");
+  scene("game", ({ score, level }) => {
     const levels = [
       [
         "                                        ",
         "      C        C              C         ",
-        "      =      ==             ===         ",
+        "      =      ==             ===        O",
         "                                        ",
         "    = =  =   X  =    ===    = X   =   X=",
         "=======  ========  =======  ============"
+      ],
+      [
+        "                C                     ",
+        "              ====          C         ",
+        "=                      =  ====        ",
+        "==       ==                           ",
+        "===  ==   X    ===        X  ==    X =",
+        "=== ==================================="
       ]
     ];
     const levelConfig = {
@@ -2774,9 +2783,14 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
         sprite("coin"),
         area(),
         "coin"
+      ],
+      "O": () => [
+        sprite("portal"),
+        area(),
+        "portal"
       ]
     };
-    addLevel(levels[0], levelConfig);
+    addLevel(levels[level], levelConfig);
     const player = add([
       sprite("bean"),
       pos(0, 0),
@@ -2788,6 +2802,11 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       pos(0, 0),
       fixed(),
       text("Score: " + score, { size: 40 })
+    ]);
+    add([
+      pos(0, 50),
+      fixed(),
+      text("Level: " + level, { size: 40 })
     ]);
     const increaseScore = /* @__PURE__ */ __name(() => {
       score = score + 1;
@@ -2835,6 +2854,9 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       coin.destroy();
       increaseScore();
     });
+    player.collides("portal", () => {
+      go("game", { score, level: level + 1 });
+    });
   });
   scene("gameOver", () => {
     add([
@@ -2847,6 +2869,6 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       text("GAME OVER")
     ]);
   });
-  go("game", { score: 0 });
+  go("game", { score: 0, level: 0 });
 })();
 //# sourceMappingURL=game.js.map

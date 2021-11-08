@@ -19,11 +19,12 @@ loadSprite("bean", "sprites/bean.png");
 loadSprite("grass", "sprites/grass.png");
 loadSprite("ghosty", "sprites/ghosty.png")
 loadSprite("coin", "sprites/coin.png")
+loadSprite("portal", "sprites/portal.png")
 
 
 
 // Szene: game
-scene("game", ({score}) => {
+scene("game", ({score, level}) => {
 
   // Alle Levels
   const levels = [
@@ -31,11 +32,19 @@ scene("game", ({score}) => {
       
       "                                        ",
       "      C        C              C         ",
-      "      =      ==             ===         ",
+      "      =      ==             ===        O",
       "                                        ",
       "    = =  =   X  =    ===    = X   =   X=",
       "=======  ========  =======  ============",
     ],
+    [
+      "                C                     ",
+      "              ====          C         ",
+      "=                      =  ====        ",
+      "==       ==                           ",
+      "===  ==   X    ===        X  ==    X =",
+      "=== ==================================="
+    ]
   ];
 
   // Alle Objekte im Spiel konfigurieren
@@ -62,10 +71,15 @@ scene("game", ({score}) => {
       area(),
       "coin"
     ],
+    "O": () =>[
+      sprite("portal"),
+      area(),
+      "portal"
+    ],
   }
 
   // Level laden
-  addLevel(levels[0], levelConfig);
+  addLevel(levels[level], levelConfig);
 
   // Spieler hinzufügen
   const player = add([
@@ -81,6 +95,13 @@ scene("game", ({score}) => {
     pos(0,0),
     fixed(),
     text("Score: " + score, {size: 40}),
+  ]);
+
+  // Level anzeigen
+  add([
+    pos(0,50),
+    fixed(),
+    text("Level: " + level, {size: 40}),
   ]);
 
   // Wiederverwendbare Funktion, um den Score zu erhöhen
@@ -149,6 +170,10 @@ scene("game", ({score}) => {
     increaseScore();
   });
 
+  // Spieler berührt Portal
+  player.collides("portal", () => {
+    go("game", {score: score, level: level + 1})
+  });
 
 });
 
@@ -169,4 +194,4 @@ scene("gameOver", () => {
 
 
 // Spiel starten
-go("game", {score: 0})
+go("game", {score: 0, level: 0})
