@@ -10,6 +10,7 @@ kaboom(
 
 
 // Sprites laden
+loadSprite("bean", "sprites/bean.png");
 loadSprite("grass", "sprites/grass.png");
 
 
@@ -34,11 +35,22 @@ scene("game", () => {
     height: 64,
     "=": () =>[
       sprite("grass"),
+      area(),
+      solid(),
     ]
   }
 
   // Level laden
   addLevel(levels[0], levelConfig);
+
+  // Spieler hinzufügen
+  const player = add([
+    sprite("bean"),
+    pos(0,0),
+    area(),
+    body(),
+    "player"
+  ]);
 });
 
 
