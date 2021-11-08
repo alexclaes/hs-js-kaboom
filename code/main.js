@@ -11,11 +11,14 @@ kaboom(
 // Wichtige Konstanten
 const MOVE_SPEED = 400;
 const FALL_GAME_OVER = 6 * 64;
+const MOVE_SPEED_ENEMY = 200;
 
 
 // Sprites laden
 loadSprite("bean", "sprites/bean.png");
 loadSprite("grass", "sprites/grass.png");
+loadSprite("ghosty", "sprites/ghosty.png")
+
 
 
 // Szene: game
@@ -24,11 +27,12 @@ scene("game", () => {
   // Alle Levels
   const levels = [
     [
-      "                                        ",
+      
       "                                        ",
       "                                        ",
       "      =      ==             ===         ",
-      "    = =  =      =    ===    =      =    =",
+      "                                        ",
+      "    = =  =   X  =    ===    = X   =   X=",
       "=======  ========  =======  ============",
     ],
   ];
@@ -41,6 +45,16 @@ scene("game", () => {
       sprite("grass"),
       area(),
       solid(),
+    ],
+    "X": () => [
+      sprite("ghosty"),
+      area(),
+      body(),
+      "enemy",
+      {
+        direction: -1,
+        lastPositionX: 0
+      }
     ]
   }
 
@@ -81,7 +95,19 @@ scene("game", () => {
     if(player.pos.y > FALL_GAME_OVER) {
       player.destroy();
     }
-  })
+  });
+
+  // Gegner bewegen
+  action("enemy", (enemy) => {
+    if(enemy.lastPositionX === enemy.pos.x) {
+      enemy.direction = enemy.direction * -1
+    }
+    enemy.lastPositionX = enemy.pos.x
+
+    enemy.move(enemy.direction * MOVE_SPEED_ENEMY, 0);
+  });
+
+
 });
 
 

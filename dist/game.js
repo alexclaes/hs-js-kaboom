@@ -2736,16 +2736,18 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   });
   var MOVE_SPEED = 400;
   var FALL_GAME_OVER = 6 * 64;
+  var MOVE_SPEED_ENEMY = 200;
   loadSprite("bean", "sprites/bean.png");
   loadSprite("grass", "sprites/grass.png");
+  loadSprite("ghosty", "sprites/ghosty.png");
   scene("game", () => {
     const levels = [
       [
         "                                        ",
         "                                        ",
-        "                                        ",
         "      =      ==             ===         ",
-        "    = =  =      =    ===    =      =    =",
+        "                                        ",
+        "    = =  =   X  =    ===    = X   =   X=",
         "=======  ========  =======  ============"
       ]
     ];
@@ -2756,6 +2758,16 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
         sprite("grass"),
         area(),
         solid()
+      ],
+      "X": () => [
+        sprite("ghosty"),
+        area(),
+        body(),
+        "enemy",
+        {
+          direction: -1,
+          lastPositionX: 0
+        }
       ]
     };
     addLevel(levels[0], levelConfig);
@@ -2784,6 +2796,13 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       if (player.pos.y > FALL_GAME_OVER) {
         player.destroy();
       }
+    });
+    action("enemy", (enemy) => {
+      if (enemy.lastPositionX === enemy.pos.x) {
+        enemy.direction = enemy.direction * -1;
+      }
+      enemy.lastPositionX = enemy.pos.x;
+      enemy.move(enemy.direction * MOVE_SPEED_ENEMY, 0);
     });
   });
   go("game");
