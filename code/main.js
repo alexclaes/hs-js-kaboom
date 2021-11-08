@@ -89,6 +89,12 @@ scene("game", ({score}) => {
     scoreLabel.text = "Score: " + score;
   };
 
+  // Wiederverwendbare Funktion zum Beenden des Spiels
+  const gameOver = () => {
+    player.destroy();
+    go("gameOver");
+  }
+
   // Spieler bewegen
   keyDown("right", () => {
     player.move(MOVE_SPEED, 0)
@@ -112,7 +118,7 @@ scene("game", ({score}) => {
   // Spieler fällt hinunter
   action("player", () => {
     if(player.pos.y > FALL_GAME_OVER) {
-      player.destroy();
+      gameOver();
     }
   });
 
@@ -129,7 +135,7 @@ scene("game", ({score}) => {
   // Spieler berührt Gegner
   player.collides("enemy", (enemy) => {
     if(player.grounded()){
-      player.destroy();
+      gameOver();
     }
     else {
       enemy.destroy();
@@ -145,6 +151,21 @@ scene("game", ({score}) => {
 
 
 });
+
+
+// Szene: Game Over
+scene("gameOver", () => {
+  add([
+    pos(0,0),
+    rect(width(), height()),
+    color(0,0,0)
+  ]),
+  add([
+    pos(width()/2, height()/2),
+    origin("center"),
+    text("GAME OVER")
+  ])
+})
 
 
 // Spiel starten
