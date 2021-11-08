@@ -2731,12 +2731,30 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   }, "default");
 
   // code/main.js
-  Es();
-  loadSprite("bean", "sprites/bean.png");
-  add([
-    sprite("bean"),
-    pos(80, 40),
-    area()
-  ]);
+  Es({
+    background: [166, 209, 247]
+  });
+  loadSprite("grass", "sprites/grass.png");
+  scene("game", () => {
+    const levels = [
+      [
+        "                                        ",
+        "                                        ",
+        "                                        ",
+        "                                        ",
+        "                                        ",
+        "========================================"
+      ]
+    ];
+    const levelConfig = {
+      width: 64,
+      height: 64,
+      "=": () => [
+        sprite("grass")
+      ]
+    };
+    addLevel(levels[0], levelConfig);
+  });
+  go("game");
 })();
 //# sourceMappingURL=game.js.map
