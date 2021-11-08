@@ -2734,6 +2734,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   Es({
     background: [166, 209, 247]
   });
+  var MOVE_SPEED = 400;
   loadSprite("bean", "sprites/bean.png");
   loadSprite("grass", "sprites/grass.png");
   scene("game", () => {
@@ -2764,6 +2765,20 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       body(),
       "player"
     ]);
+    keyDown("right", () => {
+      player.move(MOVE_SPEED, 0);
+    });
+    keyDown("left", () => {
+      player.move(-MOVE_SPEED, 0);
+    });
+    keyDown("space", () => {
+      if (player.grounded()) {
+        player.jump();
+      }
+    });
+    action(() => {
+      camPos(player.pos);
+    });
   });
   go("game");
 })();

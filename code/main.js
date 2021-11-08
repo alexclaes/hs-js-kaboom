@@ -8,6 +8,9 @@ kaboom(
   }
 );
 
+// Wichtige Konstanten
+const MOVE_SPEED = 400;
+
 
 // Sprites laden
 loadSprite("bean", "sprites/bean.png");
@@ -51,6 +54,28 @@ scene("game", () => {
     body(),
     "player"
   ]);
+
+  // Spieler bewegen
+  keyDown("right", () => {
+    player.move(MOVE_SPEED, 0)
+  });
+
+  keyDown("left", () => {
+    player.move(-MOVE_SPEED, 0)
+  });
+
+  keyDown("space", () => {
+    if(player.grounded()){
+      player.jump();
+    }
+  });
+
+
+
+  // Kamera auf Spielfigur ausrichten
+  action(() => {
+    camPos(player.pos);
+  });
 });
 
 
