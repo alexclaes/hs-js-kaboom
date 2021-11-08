@@ -22,7 +22,7 @@ loadSprite("ghosty", "sprites/ghosty.png")
 
 
 // Szene: game
-scene("game", () => {
+scene("game", ({score}) => {
 
   // Alle Levels
   const levels = [
@@ -70,6 +70,19 @@ scene("game", () => {
     "player"
   ]);
 
+  // Score anzeigen
+  const scoreLabel = add([
+    pos(0,0),
+    fixed(),
+    text("Score: " + score, {size: 40}),
+  ]);
+
+  // Wiederverwendbare Funktion, um den Score zu erhöhen
+  const increaseScore = () => {
+    score = score+1;
+    scoreLabel.text = "Score: " + score;
+  };
+
   // Spieler bewegen
   keyDown("right", () => {
     player.move(MOVE_SPEED, 0)
@@ -114,6 +127,7 @@ scene("game", () => {
     }
     else {
       enemy.destroy();
+      increaseScore();
     }
   });
 
@@ -122,4 +136,4 @@ scene("game", () => {
 
 
 // Spiel starten
-go("game")
+go("game", {score: 0})
