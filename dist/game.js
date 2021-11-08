@@ -2735,6 +2735,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     background: [166, 209, 247]
   });
   var MOVE_SPEED = 400;
+  var FALL_GAME_OVER = 6 * 64;
   loadSprite("bean", "sprites/bean.png");
   loadSprite("grass", "sprites/grass.png");
   scene("game", () => {
@@ -2743,9 +2744,9 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
         "                                        ",
         "                                        ",
         "                                        ",
-        "                                        ",
-        "                                        ",
-        "========================================"
+        "      =      ==             ===         ",
+        "    = =  =      =    ===    =      =    =",
+        "=======  ========  =======  ============"
       ]
     ];
     const levelConfig = {
@@ -2778,6 +2779,11 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     });
     action(() => {
       camPos(player.pos);
+    });
+    action("player", () => {
+      if (player.pos.y > FALL_GAME_OVER) {
+        player.destroy();
+      }
     });
   });
   go("game");

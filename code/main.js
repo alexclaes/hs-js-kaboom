@@ -10,6 +10,7 @@ kaboom(
 
 // Wichtige Konstanten
 const MOVE_SPEED = 400;
+const FALL_GAME_OVER = 6 * 64;
 
 
 // Sprites laden
@@ -26,9 +27,9 @@ scene("game", () => {
       "                                        ",
       "                                        ",
       "                                        ",
-      "                                        ",
-      "                                        ",
-      "========================================",
+      "      =      ==             ===         ",
+      "    = =  =      =    ===    =      =    =",
+      "=======  ========  =======  ============",
     ],
   ];
 
@@ -70,12 +71,17 @@ scene("game", () => {
     }
   });
 
-
-
   // Kamera auf Spielfigur ausrichten
   action(() => {
     camPos(player.pos);
   });
+
+  // Spieler fällt hinunter
+  action("player", () => {
+    if(player.pos.y > FALL_GAME_OVER) {
+      player.destroy();
+    }
+  })
 });
 
 
