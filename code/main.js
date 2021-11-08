@@ -18,6 +18,7 @@ const MOVE_SPEED_ENEMY = 200;
 loadSprite("bean", "sprites/bean.png");
 loadSprite("grass", "sprites/grass.png");
 loadSprite("ghosty", "sprites/ghosty.png")
+loadSprite("coin", "sprites/coin.png")
 
 
 
@@ -29,7 +30,7 @@ scene("game", ({score}) => {
     [
       
       "                                        ",
-      "                                        ",
+      "      C        C              C         ",
       "      =      ==             ===         ",
       "                                        ",
       "    = =  =   X  =    ===    = X   =   X=",
@@ -55,7 +56,12 @@ scene("game", ({score}) => {
         direction: -1,
         lastPositionX: 0
       }
-    ]
+    ],
+    "C": () =>[
+      sprite("coin"),
+      area(),
+      "coin"
+    ],
   }
 
   // Level laden
@@ -129,6 +135,12 @@ scene("game", ({score}) => {
       enemy.destroy();
       increaseScore();
     }
+  });
+
+  // Spieler berührt Coin
+  player.collides("coin", (coin) => {
+    coin.destroy();
+    increaseScore();
   });
 
 
