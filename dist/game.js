@@ -2804,6 +2804,13 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       enemy.lastPositionX = enemy.pos.x;
       enemy.move(enemy.direction * MOVE_SPEED_ENEMY, 0);
     });
+    player.collides("enemy", (enemy) => {
+      if (player.grounded()) {
+        player.destroy();
+      } else {
+        enemy.destroy();
+      }
+    });
   });
   go("game");
 })();

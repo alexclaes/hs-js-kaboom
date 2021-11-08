@@ -107,6 +107,16 @@ scene("game", () => {
     enemy.move(enemy.direction * MOVE_SPEED_ENEMY, 0);
   });
 
+  // Spieler berührt Gegner
+  player.collides("enemy", (enemy) => {
+    if(player.grounded()){
+      player.destroy();
+    }
+    else {
+      enemy.destroy();
+    }
+  });
+
 
 });
 
